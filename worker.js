@@ -1,8 +1,17 @@
-// Import required modules
-import { Telegram } from 'telegram';
-
-// Initialize Telegram bot
-const bot = new Telegram(env.BOT_TOKEN);
+// Instead, create a helper function to send messages
+async function sendTelegramMessage(chatId, text) {
+    const response = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+      }),
+    });
+    return response.json();
+  }
 
 // Helper function to generate random token
 function generateToken(length = 8) {
@@ -66,30 +75,30 @@ async function handleRequest(request) {
                     return new Response('OK', { status: 200 });
                 }
                 if (!isPrivateChat) {
-                    return bot.sendMessage(chatId, '注册命令只能在私聊中使用。');
+                    return await sendTelegramMessage(chatId, '注册命令只能在私聊中使用。');
                 }
-                return handleSignup(userId, userName, chatId);
+                return await handleSignup(userId, userName, chatId);
 
             case '/get':
                 if (!isPrivateChat && !text.includes('@' + env.BOT_USERNAME)) {
                     return new Response('OK', { status: 200 });
                 }
-                return handleGet(userId, chatId);
+                return await handleGet(userId, chatId);
 
             case '/delete':
                 if (!isPrivateChat && !text.includes('@' + env.BOT_USERNAME)) {
                     return new Response('OK', { status: 200 });
                 }
                 if (!isPrivateChat) {
-                    return bot.sendMessage(chatId, '删除命令只能在私聊中使用。');
+                    return await sendTelegramMessage(chatId, '删除命令只能在私聊中使用。');
                 }
-                return handleDelete(userId, chatId);
+                return await handleDelete(userId, chatId);
 
             default:
                 if (!isPrivateChat && !text.includes('@' + env.BOT_USERNAME)) {
                     return new Response('OK', { status: 200 });
                 }
-                return bot.sendMessage(chatId, '未知命令。请使用 /signup, /get, 或 /delete。');
+                return await sendTelegramMessage(chatId, '未知命令。请使用 /signup, /get, 或 /delete。');
         }
     }
 
@@ -117,7 +126,7 @@ async function handleSignup(userId, userName, chatId) {
         .bind(userName, userId)
         .run();
 
-    return bot.sendMessage(chatId, `您的token是: ${userId}:${token}`);
+    return await sendTelegramMessage(chatId, `您的token是: ${userId}:${token}`);
 }
 
 // Handle /get command
@@ -139,11 +148,11 @@ async function handleGet(userId, chatId) {
         message = "您还未注册。使用 /signup 命令注册后即可参与排行。\n\n" + message;
     }
 
-    return bot.sendMessage(chatId, message);
+    return await sendTelegramMessage(chatId, message);
 }
 
 // Handle /delete command
 async function handleDelete(userId, chatId) {
     await DB.prepare('DELETE FROM auth WHERE userID = ?').bind(userId).run();
-    return bot.sendMessage(chatId, '您的账户已被删除。');
+    return await sendTelegramMessage(chatId, '您的账户已被删除。');
 }
