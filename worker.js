@@ -23,11 +23,6 @@ function generateToken(length = 8) {
     return result;
 }
 
-// Main event handler
-addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request));
-});
-
 async function handleRequest(request) {
     // Check if the request is for the webhook path
     const url = new URL(request.url);
@@ -156,3 +151,10 @@ async function handleDelete(userId, chatId) {
     await DB.prepare('DELETE FROM auth WHERE userID = ?').bind(userId).run();
     return await sendTelegramMessage(chatId, '您的账户已被删除。');
 }
+
+// At the end of the file, add:
+export default {
+    async fetch(request, env) {
+      return handleRequest(request);
+    }
+  };
