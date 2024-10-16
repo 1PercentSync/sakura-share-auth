@@ -10,3 +10,8 @@ database_id = "9fb790c8-d305-4739-b920-5693cb223bc4"
 
 [placement]
 mode = "smart"
+
+[vars]
+BOT_TOKEN = ""
+BOT_USERNAME = ""
+TELEGRAM_SECRET_TOKEN = ""
