@@ -3,7 +3,8 @@ import { sendTelegramMessage } from "./utils";
 
 export default {
     async fetch(request, env) {
-        if (request.url.pathname !== '/webhook') {
+        const { pathname } = new URL(request.url);
+        if (pathname !== '/webhook') {
             return new Response('Not Found', { status: 404 });
         }
         if(request.headers.get('X-Telegram-Bot-Api-Secret-Token')!==env.TELEGRAM_SECRET_TOKEN){
