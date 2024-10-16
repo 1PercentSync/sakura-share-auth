@@ -1,7 +1,7 @@
 name = "sakura-share-auth"
 main = "worker.js"
 compatibility_date = "2023-01-01"
-workers_dev = false
+workers_dev = true
 
 [[d1_databases]]
 binding = "DB"
@@ -10,7 +10,3 @@ database_id = "9fb790c8-d305-4739-b920-5693cb223bc4"
 
 [placement]
 mode = "smart"
-
-routes = [
-    { pattern = "bot.sakura-share.one", custom_domain = true }
-]
