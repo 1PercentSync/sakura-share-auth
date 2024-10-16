@@ -20,7 +20,7 @@ export default {
     }
 };
 
-async function handleRequest(request) {
+async function handleRequest(request, env) {
     // Parse Telegram update
     const update = await request.json();
 
