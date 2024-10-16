@@ -1,11 +1,11 @@
 # Telegram Bot API token
-$botToken = "7866348862:AAHgJIPOJlxEuHPoZOE59VaWCr0qwqJGTbM"
+$botToken = ""
 
 # Webhook URL (your Cloudflare Worker URL)
-$webhookUrl = "https://sakura-share-auth.n3shelter365.workers.dev/webhook"
+$webhookUrl = "https://your Cloudflare Worker URL/webhook"
 
 # Secret token for webhook (should match the one in your worker)
-$secretToken = "Ag8qv0I2"
+$secretToken = ""
 
 # Construct the API URL
 $apiUrl = "https://api.telegram.org/bot$botToken/setWebhook"
